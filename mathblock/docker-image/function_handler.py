@@ -3,7 +3,7 @@ from MongoDB_Class import MongoDB_Class
 from MinIO_Class import MinIO_Class
 
 # Import custom Functions for jobs
-from subtraction import subtraction
+from operations import subtraction, addition, division, multiplication, logarithm, power
 
 """ Functions used for the json handling """
 # Request a job
@@ -25,23 +25,28 @@ def job_requestor(job_json, jobs_anwers_dict, playbook):
         name = job_json["info"]["name"]
 
         if(name == "addition"):
-            pass
+            print("[INFO] Addition Found.")
+            jobs_anwers_dict[step] = addition(playbook, job_json, jobs_anwers_dict[from_step[0]], jobs_anwers_dict[from_step[1]])
         
         if(name == "subtraction"):
             print("[INFO] Subtraction Found.")
             jobs_anwers_dict[step] = subtraction(playbook, job_json, jobs_anwers_dict[from_step[0]], jobs_anwers_dict[from_step[1]])
         
         if(name == "division"):
-            pass
+            print("[INFO] Division Found.")
+            jobs_anwers_dict[step] = division(playbook, job_json, jobs_anwers_dict[from_step[0]], jobs_anwers_dict[from_step[1]])
         
         if(name == "multiplication"):
-            pass
+            print("[INFO] Multiplication Found.")
+            jobs_anwers_dict[step] = multiplication(playbook, job_json, jobs_anwers_dict[from_step[0]], jobs_anwers_dict[from_step[1]])
         
         if(name == "logarithm"):
-            pass
+            print("[INFO] Logarithm Found.")
+            jobs_anwers_dict[step] = logarithm(playbook, job_json, jobs_anwers_dict[from_step[0]], jobs_anwers_dict[from_step[1]])
         
-        if(name == "exponential"):
-            pass
+        if(name == "power"):
+            print("[INFO] Power Found.")
+            jobs_anwers_dict[step] = power(playbook, job_json, jobs_anwers_dict[from_step[0]], jobs_anwers_dict[from_step[1]])
         
     return
 
@@ -63,13 +68,6 @@ def jobs(job_step, jobs_dict, jobs_anwers_dict, playbook, joins):
     
     # Depth-first approach
     next_step = jobs_dict[job_step]["next"]
-    # for step in next_steps:
-    #     if(step == 0): # If ther is no next job then do not try to go deeper
-    #         pass
-    #     elif(flagged == True): # If this job is flagged do not try to go deeper
-    #         pass
-    #     else:
-    #         jobs(step, jobs_dict, jobs_anwers_dict, playbook, joins)
     
     if (next_step == 0):
         pass
