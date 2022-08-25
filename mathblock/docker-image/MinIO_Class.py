@@ -64,5 +64,8 @@ class MinIO_Class:
             del data[0]
             for i in range(len(data)):
                 data[i] = data[i][position]
+                data[i] = data[i].replace("\r", "")
+                if(data[i] == ""):
+                    data[i] = "None"
             values.extend(data)
         return values

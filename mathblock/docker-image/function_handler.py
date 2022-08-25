@@ -4,6 +4,14 @@ from MinIO_Class import MinIO_Class
 
 # Import custom Functions for jobs
 from operations import subtraction, addition, division, multiplication, logarithm, power
+from operations import logical_and, logical_or, logical_not
+from operations import equal, not_equal, less_or_equal, greater_or_equal, greater_than, less_than
+from operations import mean_value, variance_value, amount_of
+from value_assist import value_builder
+
+""" Global Variables """
+# A dictionary containing information about the bucket and the value of each argument
+input_buckets = {}
 
 """ Functions used for the json handling """
 # Request a job
@@ -15,15 +23,21 @@ def job_requestor(job_json, jobs_anwers_dict, playbook):
     # If argument then only save its bucket
     if(kind == "arg"):
         print("[INFO] Argument Found.")
-        # Get the bucket of the argument
-        arg_id = job_json["info"]["arg_id"] - 1
-        arg_bucket = playbook["inputs"][arg_id]
-        jobs_anwers_dict[step] = [arg_bucket, playbook["function"]["args"][arg_id]["feature"]]
+
+        # Get the ID of the argument
+        arg_id = job_json["info"]["arg_id"]
+
+        # Check if arg is value or feature
+        if input_buckets[arg_id][0] == "value":
+            jobs_anwers_dict[step] = value_builder(playbook, job_json, input_buckets[arg_id][1])
+        else:
+            jobs_anwers_dict[step] = [input_buckets[arg_id][0], input_buckets[arg_id][1], "column"]
     
     # If operation then find operation and then execute it
     if(kind == "operation"):
         name = job_json["info"]["name"]
 
+        """ ARITHMETIC """
         if(name == "addition"):
             print("[INFO] Addition Found.")
             jobs_anwers_dict[step] = addition(playbook, job_json, jobs_anwers_dict[from_step[0]], jobs_anwers_dict[from_step[1]])
@@ -47,6 +61,57 @@ def job_requestor(job_json, jobs_anwers_dict, playbook):
         if(name == "power"):
             print("[INFO] Power Found.")
             jobs_anwers_dict[step] = power(playbook, job_json, jobs_anwers_dict[from_step[0]], jobs_anwers_dict[from_step[1]])
+        
+        """ LOGICAL """
+        if(name == "logical_and"):
+            print("[INFO] Logical_And Found.")
+            jobs_anwers_dict[step] = logical_and(playbook, job_json, jobs_anwers_dict[from_step[0]], jobs_anwers_dict[from_step[1]])
+        
+        if(name == "logical_or"):
+            print("[INFO] Logical_Or Found.")
+            jobs_anwers_dict[step] = logical_or(playbook, job_json, jobs_anwers_dict[from_step[0]], jobs_anwers_dict[from_step[1]])
+        
+        if(name == "logical_not"):
+            print("[INFO] Logical_Not Found.")
+            jobs_anwers_dict[step] = logical_not(playbook, job_json, jobs_anwers_dict[from_step])
+        
+        """ COMPARISON """
+        if(name == "equal"):
+            print("[INFO] Equal Found.")
+            jobs_anwers_dict[step] = equal(playbook, job_json, jobs_anwers_dict[from_step[0]], jobs_anwers_dict[from_step[1]])
+        
+        if(name == "not_equal"):
+            print("[INFO] Not_Equal Found.")
+            jobs_anwers_dict[step] = not_equal(playbook, job_json, jobs_anwers_dict[from_step[0]], jobs_anwers_dict[from_step[1]])
+        
+        if(name == "less_or_equal"):
+            print("[INFO] Less_Or_Equal Found.")
+            jobs_anwers_dict[step] = less_or_equal(playbook, job_json, jobs_anwers_dict[from_step[0]], jobs_anwers_dict[from_step[1]])
+        
+        if(name == "greater_or_equal"):
+            print("[INFO] Greater_Or_Equal Found.")
+            jobs_anwers_dict[step] = greater_or_equal(playbook, job_json, jobs_anwers_dict[from_step[0]], jobs_anwers_dict[from_step[1]])
+        
+        if(name == "greater_than"):
+            print("[INFO] Greater_Than Found.")
+            jobs_anwers_dict[step] = greater_than(playbook, job_json, jobs_anwers_dict[from_step[0]], jobs_anwers_dict[from_step[1]])
+        
+        if(name == "less_than"):
+            print("[INFO] Less_than Found.")
+            jobs_anwers_dict[step] = less_than(playbook, job_json, jobs_anwers_dict[from_step[0]], jobs_anwers_dict[from_step[1]])
+        
+        """ STATISTICAL """
+        if(name == "mean_value"):
+            print("[INFO] Mean_Value Found.")
+            jobs_anwers_dict[step] = mean_value(playbook, job_json, jobs_anwers_dict[from_step])
+        
+        if(name == "variance_value"):
+            print("[INFO] Variance_Value Found.")
+            jobs_anwers_dict[step] = variance_value(playbook, job_json, jobs_anwers_dict[from_step])
+        
+        if(name == "amount_of"):
+            print("[INFO] Amount_Of Found.")
+            jobs_anwers_dict[step] = amount_of(playbook, job_json, jobs_anwers_dict[from_step[0]], jobs_anwers_dict[from_step[1]])
         
     return
 
@@ -110,10 +175,22 @@ def handler(playbook):
     
     # Print jobs_anwers_dict for testing purposes
     for job_step, answer in jobs_anwers_dict.items():
-        print("[INFO]", job_step, "->", answer[0], "with:", answer[1])
+        print("[INFO]", job_step, "->", answer[0], "with:", answer[1], "| being:", answer[2])
 
     return
 
+def bucket_dict_initialization(json_body):
+    inputs = json_body["inputs"]
+    args = json_body["function"]["args"]
+    k = 0
+    for arg in args:
+        if "feature" in arg:
+            input_buckets[arg["arg_id"]] = [inputs[k], arg["feature"]]
+            k += 1
+        if "value" in arg:
+            input_buckets[arg["arg_id"]] = ["value", arg["value"]]
+
+    return
 
 def function_thread(json_body):
     # Get job id
@@ -123,6 +200,8 @@ def function_thread(json_body):
     mongo_obj = MongoDB_Class()
     mongo_record = {"job-id" : job_id, "status" : "progress"}
     mongo_obj.insertMongoRecord(mongo_record)
+
+    bucket_dict_initialization(json_body)
 
     # Send the playbook for handling
     handler(json_body)
