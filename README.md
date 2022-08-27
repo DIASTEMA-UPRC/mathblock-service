@@ -1,7 +1,7 @@
-# DIASTEMA Orchestrator
+# DIASTEMA Mathblock Service
 
 ## Description
-DIASTEMA uses a service to execute mathematical expressions on different datasets in order to produce new datasets containing valuable information [[1]](https://github.com/DIASTEMA-UPRC/orchestrator/blob/main/README.md#references).
+DIASTEMA uses a service to execute mathematical expressions on different datasets in order to produce new datasets containing valuable information [[1]](https://github.com/DIASTEMA-UPRC/mathblock-service/blob/main/README.md#references).
 
 This service receives a JSON graph that mentions in it all the necessary information for the execution of a mathematical expression. This information refers to which operation should run first before others, what operation each one is, various arguments, ids, and more.
 
