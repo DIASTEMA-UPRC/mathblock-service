@@ -1,0 +1,43 @@
+{
+    "job-id": "34345345s3d4643",
+    "inputs": [
+        "metis/datasets/logic"
+    ],
+    "output": "metis/analysis-5633456323/function-1",
+    "function": {
+        "name": "a_function",
+        "output_type": "boolean",
+        "args": [
+            {
+                "type": "boolean",
+                "name": "val_1",
+                "arg_id": 1,
+                "feature": "three"
+            }
+        ],
+        "expression": [
+            {
+                "id": "4",
+                "step": 1,
+                "from": 0,
+                "next": 2,
+                "info": {
+                    "kind": "arg",
+                    "type": "boolean",
+                    "name": "val_1",
+                    "arg_id": 1
+                }
+            },
+            {
+                "id": "6",
+                "step": 2,
+                "from": 1,
+                "next": 0,
+                "info": {
+                    "kind": "operation",
+                    "name": "logical_not"
+                }
+            }
+        ]
+    }
+}

@@ -1,0 +1,137 @@
+{
+    "job-id": "34345345s34643",
+    "inputs": [
+        "metis/datasets/animals",
+        "metis/datasets/animals"
+    ],
+    "output": "metis/analysis-563345633/function-5",
+    "function": {
+        "name": "Test_Func",
+        "output_type": "float",
+        "args": [
+            {
+                "type": "float",
+                "name": "val_1",
+                "arg_id": 1,
+                "feature": "dog"
+            },
+            {
+                "type": "boolean",
+                "name": "val_2",
+                "arg_id": 2,
+                "value": "10"
+            },
+            {
+                "type": "float",
+                "name": "val_3",
+                "arg_id": 3,
+                "feature": "dog"
+            },
+            {
+                "type": "float",
+                "name": "val_4",
+                "arg_id": 4,
+                "value": "5"
+            }
+        ],
+        "expression": [
+            {
+                "id": "1",
+                "step": 1,
+                "from": 0,
+                "next": 5,
+                "info": {
+                    "kind": "arg",
+                    "type": "float",
+                    "name": "val_1",
+                    "arg_id": 1
+                }
+            },
+            {
+                "id": "2",
+                "step": 2,
+                "from": 0,
+                "next": 5,
+                "info": {
+                    "kind": "arg",
+                    "type": "float",
+                    "name": "val_2",
+                    "arg_id": 2
+                }
+            },
+            {
+                "id": "3",
+                "step": 3,
+                "from": 0,
+                "next": 6,
+                "info": {
+                    "kind": "arg",
+                    "type": "float",
+                    "name": "val_3",
+                    "arg_id": 3
+                }
+            },
+            {
+                "id": "4",
+                "step": 4,
+                "from": 0,
+                "next": 6,
+                "info": {
+                    "kind": "arg",
+                    "type": "float",
+                    "name": "val_4",
+                    "arg_id": 4
+                }
+            },
+            {
+                "id": "5",
+                "step": 5,
+                "from": [
+                    1,
+                    2
+                ],
+                "next": 7,
+                "info": {
+                    "kind": "operation",
+                    "name": "subtraction"
+                }
+            },
+            {
+                "id": "6",
+                "step": 6,
+                "from": [
+                    3,
+                    4
+                ],
+                "next": 7,
+                "info": {
+                    "kind": "operation",
+                    "name": "subtraction"
+                }
+            },
+            {
+                "id": "7",
+                "step": 7,
+                "from": [
+                    5,
+                    6
+                ],
+                "next": 8,
+                "info": {
+                    "kind": "operation",
+                    "name": "addition"
+                }
+            },
+            {
+                "id": "8",
+                "step": 8,
+                "from": 7,
+                "next": 0,
+                "info": {
+                    "kind": "operation",
+                    "name": "mean_value"
+                }
+            }
+        ]
+    }
+}

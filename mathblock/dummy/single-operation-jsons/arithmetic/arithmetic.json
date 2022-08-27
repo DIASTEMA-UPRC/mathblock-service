@@ -1,0 +1,65 @@
+{
+    "job-id": "34345345s3d4643",
+    "inputs": [
+        "metis/datasets/animals",
+        "metis/datasets/animals"
+    ],
+    "output": "metis/analysis-5633456323/function-1",
+    "function": {
+        "name": "a_function",
+        "output_type": "float",
+        "args": [
+            {
+                "type": "float",
+                "name": "val_1",
+                "arg_id": 1,
+                "feature": "dog"
+            },
+            {
+                "type": "float",
+                "name": "val_2",
+                "arg_id": 2,
+                "feature": "cat"
+            }
+        ],
+        "expression": [
+            {
+                "id": "4",
+                "step": 1,
+                "from": 0,
+                "next": 3,
+                "info": {
+                    "kind": "arg",
+                    "type": "float",
+                    "name": "val_1",
+                    "arg_id": 1
+                }
+            },
+            {
+                "id": "5",
+                "step": 2,
+                "from": 0,
+                "next": 3,
+                "info": {
+                    "kind": "arg",
+                    "type": "float",
+                    "name": "val_2",
+                    "arg_id": 2
+                }
+            },
+            {
+                "id": "6",
+                "step": 3,
+                "from": [
+                    1,
+                    2
+                ],
+                "next": 0,
+                "info": {
+                    "kind": "operation",
+                    "name": "power"
+                }
+            }
+        ]
+    }
+}
