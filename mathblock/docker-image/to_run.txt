@@ -1,5 +1,7 @@
+# Build the Complex Function Normalization Service
 docker build --tag mathblock-service-image .
 
+# Run the Complex Function Normalization Service
 docker run -p 127.0.0.1:5000:5000 ^
 --name mathblock-service ^
 --restart always ^
@@ -11,4 +13,6 @@ docker run -p 127.0.0.1:5000:5000 ^
 -e MINIO_PASS=diastema ^
 -e MONGO_HOST=host.docker.internal ^
 -e MONGO_PORT=27017 ^
+-e DATABASE=rules_db ^
+-e COLLECTION=jobs ^
 mathblock-service-image
