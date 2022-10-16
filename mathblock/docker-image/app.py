@@ -46,7 +46,7 @@ def function_job_progress():
     mongo_doc = mongo_obj.findMongoDocument(job_id)
 
     # Return the status of the job
-    return mongo_doc["status"]
+    return {"status" : mongo_doc["status"]}
 
 """ Main """
 # Main code
