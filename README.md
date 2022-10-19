@@ -114,11 +114,20 @@ metis/analysis-5633456323/function-1
    - GET
    - URL: http://localhost:5000/function/progress?id=34345345s3d4643
 
-With the above call, you will get a TEXT body with only one word explained below.
+With the above call, you will get a JSON body with the schema analyzed below.
+```
+{
+           "status": "progress" | "error" | "complete",
+           "message": "..."
+}
+```
 
-Your progress can be:
-- complete: Your execution is done
-- progress: Your execution is not done yet
+The "status" can be:
+- "complete": Your execution is done
+- "progress": Your execution is not done yet
+- "error": Your execution terminated with an error
+
+The "message" attribute will exist only if the "status" is "error" and it will contain the error that occurred.
 
 ## References
 - [1] https://diastema.gr/
