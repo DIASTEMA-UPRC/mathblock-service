@@ -45,6 +45,10 @@ def function_job_progress():
     mongo_obj = MongoDB_Class()
     mongo_doc = mongo_obj.findMongoDocument(job_id)
 
+    ### Added
+    while mongo_doc == None:
+        mongo_doc = mongo_obj.findMongoDocument(job_id)
+
     # Return the status of the job
     return {"status" : mongo_doc["status"]}
 
