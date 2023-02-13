@@ -9,6 +9,11 @@ from operations import equal, not_equal, less_or_equal, greater_or_equal, greate
 from operations import mean_value, variance_value, amount_of
 from value_assist import value_builder
 
+# Import Python libraries
+import time
+import psutil
+import os
+
 """ Global Variables """
 # A dictionary containing information about the bucket and the value of each argument
 input_buckets = {}
@@ -193,6 +198,17 @@ def bucket_dict_initialization(json_body):
     return
 
 def function_thread(json_body):
+    start_time = time.time()    # Get the start time
+    # Get the RAM usage
+    process = psutil.Process(os.getpid())
+    ram_usage = process.memory_info().rss / 1024 / 1024
+
+    # Get the disk usage
+    disk_usage = psutil.disk_usage('/').used / 1024 / 1024
+
+    # Get the full RAM
+    full_ram = psutil.virtual_memory().total / 1024 / 1024
+
     # Get job id
     job_id = json_body["job-id"]
 
@@ -209,4 +225,19 @@ def function_thread(json_body):
     # The job is now complete
     # The mongo_record is the filter for the update of the completed job
     mongo_obj.updateMongoStatus(mongo_record, "complete")
+
+    # Calculate the execution time in milliseconds
+    end_time = time.time()
+    milliseconds = (end_time - start_time) * 1000
+
+    # Update the MongoDB performance metrics
+    mongo_record = { 
+        "ram-usage" : int (ram_usage),
+        "ram-existing" : int (full_ram),
+        "disk-usage" : int (disk_usage),
+        "execution-speed" : int (milliseconds) 
+    }
+
+    # Update Mongo Web Application metadata
+    mongo_obj.updateMongoPerformanceMetrics("UIDB", "pipelines", { "analysisid" :  json_body["analysis-id"]}, {"label": job_id, "value": mongo_record})
     return

@@ -32,17 +32,30 @@ Below is an example of prerequisites:
 - MongoDB
 - Postman
 - MinIO
+- MongoDB
 
 You can execute the functionality with other prerequisites and commands as well!
 
 ### MongoDB Initialization
 1. Make sure that you are using Mongo and it is running on your system. You can check this by opening a CMD and typing the below command:
 ```
-mongo
+mongosh
 ```
+After opening the Mongo shell, run the following:
+```
+use UIDB
+db.dropDatabase()
+use UIDB
+db.pipelines.insert( { "analysisid" : "039ff178fb8a5" })
+cls
+db.datasets.find()
+db.pipelines.find()
+
+```
+
 This command should open the Mongo Shell. for the rest of this guide you will not need Mongo Shell open so you can close this CMD.
 
-Mongo is used by the Mathblock Service only to be able to communicate with the Orchestrator better.
+Mongo is used by the Mathblock Service only to be able to communicate with the Orchestrator and Web Application better.
 
 ### Service Startup
 2. Clone this repository locally.

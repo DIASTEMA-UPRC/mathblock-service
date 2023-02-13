@@ -33,3 +33,20 @@ class MongoDB_Class:
         mongo_db = self.mongo_client[MongoDB_Class.DATABASE]
         db_collection = mongo_db[MongoDB_Class.COLLECTION]
         return db_collection.find_one({"job-id": job_id})
+    
+    def updateMongoPerformanceMetrics(self, client, collection, filters, metadata):
+        mongo_db = self.mongo_client[client]
+        analysis_collection = mongo_db[collection]
+
+        # Get the current metadata
+        metadata_dict = analysis_collection.find_one(filters)
+        if "performance" in metadata_dict:
+            metadata_dict = metadata_dict["performance"]
+        else:
+            metadata_dict = {}
+
+        metadata_dict[metadata["label"]] = metadata["value"]
+            
+        # Update the metadata
+        analysis_collection.update_one(filters, {"$set": {'performance': metadata_dict}})
+        return
