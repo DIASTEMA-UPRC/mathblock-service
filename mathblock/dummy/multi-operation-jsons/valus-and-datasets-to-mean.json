@@ -1,5 +1,6 @@
 {
     "job-id": "34345345s34643",
+    "analysis-id" : "039ff178fb8a5",
     "inputs": [
         "metis/datasets/animals",
         "metis/datasets/animals"
