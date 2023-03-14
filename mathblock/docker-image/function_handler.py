@@ -229,6 +229,9 @@ def function_thread(json_body):
     # Calculate the execution time in milliseconds
     end_time = time.time()
     milliseconds = (end_time - start_time) * 1000
+    
+    # Make milliseconds integer
+    milliseconds = int(milliseconds)
 
     # Update the MongoDB performance metrics
     mongo_record = { 
